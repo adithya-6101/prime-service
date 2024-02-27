@@ -1,0 +1,5 @@
+edu\iu\adicher\primesservice\PrimesServiceApplication.class
+edu\iu\adicher\primesservice\controller\HomeController.class
+edu\iu\adicher\primesservice\service\PrimesService.class
+edu\iu\adicher\primesservice\controller\PrimesController.class
+edu\iu\adicher\primesservice\service\IPrimesService.class
