@@ -1,12 +1,10 @@
 package edu.iu.adicher.primesservice.service;
 
 import edu.iu.adicher.primesservice.model.Customer;
+import edu.iu.adicher.primesservice.repository.AuthenticationDBRepository;
 import edu.iu.adicher.primesservice.repository.IAuthenticationRepository;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,9 +20,9 @@ import java.io.IOException;
 
 @Service
 public class AuthenticationService implements IAuthenticationService, UserDetailsService {
-    IAuthenticationRepository authenticationRepository;
+    AuthenticationDBRepository authenticationRepository;
 
-    public AuthenticationService(IAuthenticationRepository authenticationRepository) {
+    public AuthenticationService(AuthenticationDBRepository authenticationRepository) {
 
         this.authenticationRepository = authenticationRepository;
     }
@@ -53,7 +51,7 @@ public class AuthenticationService implements IAuthenticationService, UserDetail
 
                     .build();
 
-        } catch (IOException e) {
+        } catch (Exception e) {
 
             throw new RuntimeException(e);
 
@@ -64,7 +62,7 @@ public class AuthenticationService implements IAuthenticationService, UserDetail
 
 
     @Override
-    public boolean register (Customer customer) throws IOException { BCryptPasswordEncoder bc = new BCryptPasswordEncoder();
+    public Customer register (Customer customer) throws IOException { BCryptPasswordEncoder bc = new BCryptPasswordEncoder();
 
         String passwordEncoded = bc.encode(customer.getPassword());
 
@@ -78,58 +76,24 @@ public class AuthenticationService implements IAuthenticationService, UserDetail
     public boolean login(String username, String password) throws IOException {
         return false;
     }
-
-    @RestController
-    public class AuthenticationController{
-
-        private final IAuthenticationService authenticationService;
-        private final AuthenticationManager authenticationManager;
-        private TokenService tokenService;
-
-        public AuthenticationController (AuthenticationManager authenticationManager,
-                                         IAuthenticationService authenticationService, TokenService tokenService) {
-
-            this.authenticationManager =authenticationManager;
-
-            this.authenticationService =authenticationService;
-
-            this.tokenService = tokenService;
-
-        }
-
-        @PostMapping("/register")
-
-        public boolean register(@RequestBody Customer customer) {
-
-            try {
-
-                return authenticationService.register(customer);
-
-            } catch (IOException e) {
-
-                throw new RuntimeException(e);
-
-            }
-
-        }
-
-        @PostMapping("/login")
-
-        public String login (@RequestBody Customer customer) {
-
-            Authentication authentication = authenticationManager
-
-                    .authenticate(
-
-                            new UsernamePasswordAuthenticationToken( customer.getUsername(),
-                                    customer.getPassword()));
-
-            return tokenService.generateToken(authentication);
-
-        }
-
-    }
-
+//
+//    @RestController
+//    public class AuthenticationController{
+//
+//        private final IAuthenticationService authenticationService;
+//        private final AuthenticationManager authenticationManager;
+//        private TokenService tokenService;
+//
+//        public AuthenticationController (AuthenticationManager authenticationManager,
+//                                         IAuthenticationService authenticationService, TokenService tokenService) {
+//
+//            this.authenticationManager =authenticationManager;
+//
+//            this.authenticationService =authenticationService;
+//
+//            this.tokenService = tokenService;
+//
+//        }
 
 
 }
