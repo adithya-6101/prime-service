@@ -1,7 +1,6 @@
 package edu.iu.adicher.primesservice.repository;
 
 import edu.iu.adicher.primesservice.model.Customer;
-import org.slf4j.ILoggerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
