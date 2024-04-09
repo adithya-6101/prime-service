@@ -16,8 +16,9 @@ public class MQSender {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    public void sendMessage(int n, boolean isPrime){
+    public void sendMessage(String username,int n, boolean isPrime){
         String message = MessageFormat.format("n:{0}, isprime: {1}",n,isPrime);
+        message="{"+message+"}";
         rabbitTemplate.convertAndSend("primes",message);
     }
 }
